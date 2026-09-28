@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>வள்ளுவன் தமிழ் மையம் - நிலை 5 (பாடம் - 1)</title>
+  <style>
+    :root {
+      --primary: #4338ca;
+      --primary-dark: #312e81;
+      --accent: #f59e0b;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --green: #10b981;
+      --red: #ef4444;
+      --kural-gold: #b45309;
+      --kural-bg: #fffbeb;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 1rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+    header { text-align: center; margin-bottom: 0.6rem; }
+    header h1 { color: var(--primary); font-size: 1.5rem; }
+    header h2 { color: #6366f1; font-size: 1rem; font-weight: 600; margin-top: 0.2rem; }
+
+    .control-panel {
+      background: #eff6ff;
+      border: 2px solid #3b82f6;
+      padding: 0.6rem 1rem;
+      border-radius: 0.8rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      width: 100%;
+      max-width: 780px;
+    }
+    .badge-live {
+      background: #22c55e;
+      color: white;
+      padding: 0.2rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+    }
+    .action-pill {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.4rem 0.9rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.15s;
+    }
+    .action-pill:hover { background: var(--primary-dark); }
+    .action-pill.secondary { background: #b45309; }
+    .action-pill.stop-pill { background: #dc2626; }
+    .action-pill.file-pill { background: #0284c7; }
+
+    .nav-bar { display: flex; flex-wrap: wrap; gap: 0.35rem; justify-content: center; max-width: 900px; margin-bottom: 1rem; }
+    .nav-btn { background: #e2e8f0; border: none; padding: 0.5rem 0.8rem; border-radius: 9999px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.82rem; }
+    .nav-btn.active { background: var(--primary); color: #fff; transform: scale(1.03); }
+
+    .game-section { display: none; width: 100%; max-width: 780px; background: var(--card); border-radius: 1rem; box-shadow: 0 8px 20px rgba(0,0,0,0.06); padding: 1.25rem; }
+    .game-section.active { display: flex; flex-direction: column; gap: 0.9rem; }
+
+    .hud { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px dashed #e2e8f0; padding-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; }
+    
+    .book-illustration-stage {
+      width: 100%;
+      min-height: 180px;
+      background: #ffffff;
+      border-radius: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 2px solid #e2e8f0;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+      margin-bottom: 0.5rem;
+    }
+    .book-illustration-stage svg { width: 100%; height: 180px; }
+
+    .board { background: #f8fafc; border-radius: 0.8rem; padding: 1.1rem; text-align: center; border: 2px solid #cbd5e1; min-height: 120px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+    .big-word { font-size: 1.5rem; font-weight: bold; color: var(--primary); margin: 0.3rem 0; line-height: 1.5; }
+    .subtext { font-size: 0.95rem; color: #64748b; }
+
+    .speaker-btn {
+      background: #ede9fe;
+      border: 1px solid #c4b5fd;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin: 0.3rem auto 0 auto;
+      transition: transform 0.15s;
+    }
+    .speaker-btn:hover { transform: scale(1.1); }
+
+    .btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.6rem; }
+    .opt-btn { background: white; border: 2px solid #cbd5e1; padding: 0.8rem 0.5rem; border-radius: 0.6rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: 0.15s; }
+    .opt-btn:hover { border-color: var(--primary); background: #eef2ff; }
+    .opt-btn.correct-choice { background: var(--green) !important; color: white !important; border-color: var(--green) !important; }
+    .opt-btn.wrong-choice { background: var(--red) !important; color: white !important; border-color: var(--red) !important; }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+    .nav-arrow-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.88rem;
+      transition: 0.15s;
+    }
+    .nav-arrow-btn:hover { background: #e2e8f0; }
+
+    .feedback { text-align: center; font-weight: bold; min-height: 1.3rem; font-size: 1rem; }
+
+    /* POEM SECTION STYLES */
+    .poem-box {
+      background: #fffbeb;
+      border: 2px solid #fde68a;
+      border-radius: 0.8rem;
+      padding: 0.9rem;
+      text-align: center;
+      line-height: 2.1;
+      max-height: 290px;
+      overflow-y: auto;
+    }
+    .meter-banner {
+      font-size: 0.9rem;
+      color: #92400e;
+      margin-bottom: 0.45rem;
+      font-weight: 800;
+      background: #fef3c7;
+      padding: 0.35rem 0.6rem;
+      border-radius: 0.5rem;
+      border: 1px dashed #f59e0b;
+    }
+    .song-audio-bar {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: 0.8rem;
+      padding: 0.75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 3px 8px rgba(180, 83, 9, 0.08);
+    }
+    .audio-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .native-player {
+      width: 100%;
+      max-width: 480px;
+      height: 38px;
+    }
+    .audio-status-msg {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #b45309;
+      text-align: center;
+    }
+    .k-line { 
+      display: block; 
+      padding: 0.35rem 0.6rem; 
+      border-radius: 0.5rem; 
+      margin: 0.2rem 0; 
+      font-size: 0.98rem; 
+      font-weight: 600;
+      color: #78350f;
+    }
+
+    /* THIRUKKURAL STAGE */
+    .kural-stage {
+      background: var(--kural-bg);
+      border: 2px solid #fde68a;
+      border-radius: 0.8rem;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+    }
+    .kural-line-block {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 0.2rem 0;
+    }
+    .kural-slot {
+      min-width: 100px;
+      height: 44px;
+      background: #ffffff;
+      border: 2px dashed #d97706;
+      border-radius: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.15rem;
+      color: #92400e;
+      padding: 0 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .kural-slot.filled {
+      background: #fef3c7;
+      border-style: solid;
+      border-color: #f59e0b;
+      transform: scale(1.02);
+    }
+    .kural-slot.blank-target {
+      background: #fffbeb;
+      border: 2px dashed #b45309;
+      animation: pulseTarget 1.5s infinite;
+      cursor: pointer;
+    }
+    @keyframes pulseTarget {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(217, 119, 6, 0); }
+    }
+    .word-dock {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+      min-height: 52px;
+      padding: 0.6rem;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 0.6rem;
+      border: 1px solid #fde68a;
+    }
+    .tile-btn {
+      background: #ffffff;
+      border: 2px solid #b45309;
+      color: #78350f;
+      padding: 0.55rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+      transition: all 0.15s ease;
+    }
+    .tile-btn:hover { background: #fef3c7; transform: translateY(-2px); }
+    .meaning-card {
+      background: #ffffff;
+      border-radius: 0.6rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid #fde68a;
+      font-size: 0.95rem;
+      color: #78350f;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .spider-track { position: relative; height: 160px; background: #faf5ff; border: 2px dashed #c084fc; border-radius: 0.8rem; display: flex; justify-content: center; }
+    .spider-char { position: absolute; bottom: 8px; font-size: 2.2rem; transition: bottom 0.4s ease; }
+    .web-top { position: absolute; top: 6px; font-weight: bold; color: #7e22ce; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>வள்ளுவன் தமிழ் மையம் - நிலை 5</h1>
+    <h2>பாடம் - 1 (Padam - 1)</h2>
+  </header>
+
+  <div class="control-panel">
+    <span>🎙️ ஒலி நிலை: <span class="badge-live">இயற்கை தமிழ் குரல் (Human Voice)</span></span>
+    <button class="action-pill" onclick="testRealVoice()">உச்சரிப்பு சோதனை (Test Voice)</button>
+    <button class="action-pill secondary" onclick="gotoSongAndPlay()">🎵 பாரதியார் பாடல் கேட்க</button>
+  </div>
+
+  <div class="nav-bar">
+    <button class="nav-btn active" onclick="setPage(0)">1. இடம், காலம், எண்</button>
+    <button class="nav-btn" onclick="setPage(1)">2. திணை, பால், விகுதி</button>
+    <button class="nav-btn" onclick="setPage(2)">3. முக்காலங்கள் பயிற்சி</button>
+    <button class="nav-btn" onclick="setPage(3)">4. தாய்மொழி பாடம்</button>
+    <button class="nav-btn" onclick="setPage(4)">5. பாரதியார் பாடல்</button>
+    <button class="nav-btn" onclick="setPage(5)">6. சிலந்தியும் அரசனும்</button>
+    <button class="nav-btn" onclick="setPage(6)" style="background: #fed7aa; color: #9a3412; font-weight: bold;">7. திருக்குறள் சீர் பயிற்சி 📜</button>
+  </div>
+
+  <!-- SECTION 0 -->
+  <section class="game-section active" id="sec-0">
+    <div class="hud"><span id="p0-counter">கேள்வி: 1/20</span><span id="p0-score">புள்ளிகள்: 0</span></div>
+    <div class="book-illustration-stage" id="img-0"></div>
+    <div class="board">
+      <div class="subtext">புத்தகப் படத்தைப் பார்த்து வகைப்படுத்துக:</div>
+      <div class="big-word" id="p0-word">நான்</div>
+      <div class="subtext" id="p0-sub">(I / Me)</div>
+      <button class="speaker-btn" onclick="speakCurrent(0)">🗣️</button>
+    </div>
+    <div class="btn-grid" id="p0-btns"></div>
+    <div class="feedback" id="p0-feed"></div>
+    <div class="card-footer">
+      <button class="nav-arrow-btn" onclick="prevQ(0)">⬅️ முந்தைய கேள்வி</button>
+      <button class="nav-arrow-btn" onclick="nextQ(0)">அடுத்த கேள்வி ➡️</button>
+    </div>
+  </section>
+
+  <!-- SECTION 1 -->
+  <section class="game-section" id="sec-1">
+    <div class="hud"><span id="p1-counter">கேள்வி: 1/20</span><span id="p1-score">புள்ளிகள்: 0</span></div>
+    <div class="book-illustration-stage" id="img-1"></div>
+    <div class="board">
+      <div class="subtext">திணை / பால் / விகுதிகளைக் கண்டுபிடி:</div>
+      <div class="big-word" id="p1-word">அப்பா</div>
+      <div class="subtext" id="p1-sub">(Father)</div>
+      <button class="speaker-btn" onclick="speakCurrent(1)">🗣️</button>
+    </div>
+    <div class="btn-grid" id="p1-btns"></div>
+    <div class="feedback" id="p1-feed"></div>
+    <div class="card-footer">
+      <button class="nav-arrow-btn" onclick="prevQ(1)">⬅️ முந்தைய கேள்வி</button>
+      <button class="nav-arrow-btn" onclick="nextQ(1)">அடுத்த கேள்வி ➡️</button>
+    </div>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="game-section" id="sec-2">
+    <div class="hud"><span id="p2-counter">கேள்வி: 1/20</span><span id="p2-score">புள்ளிகள்: 0</span></div>
+    <div class="book-illustration-stage" id="img-2"></div>
+    <div class="board">
+      <div class="subtext">புத்தக வேர்ச்சொல் வினைமுற்றைப் பொருத்துக:</div>
+      <div class="big-word" style="font-size: 1.25rem;" id="p2-word">"The dog touched his toy (Past)"</div>
+      <div class="subtext" id="p2-sub">வேர்ச்சொல்: தொடு</div>
+      <button class="speaker-btn" onclick="speakCurrent(2)">🗣️</button>
+    </div>
+    <div class="btn-grid" id="p2-btns"></div>
+    <div class="feedback" id="p2-feed"></div>
+    <div class="card-footer">
+      <button class="nav-arrow-btn" onclick="prevQ(2)">⬅️ முந்தைய கேள்வி</button>
+      <button class="nav-arrow-btn" onclick="nextQ(2)">அடுத்த கேள்வி ➡️</button>
+    </div>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="game-section" id="sec-3">
+    <div class="hud"><span id="p3-counter">கேள்வி: 1/20</span><span id="p3-score">புள்ளிகள்: 0</span></div>
+    <div class="book-illustration-stage" id="img-3"></div>
+    <div class="board">
+      <div class="subtext">பாடம் - 1: தாய்மொழி நம் அடையாளம் & சொல் வளம்</div>
+      <div class="big-word" style="font-size: 1.15rem;" id="p3-word">ஒருவரின் இதயத்தைத் தொட எந்த மொழியில் பேச வேண்டும்?</div>
+      <div class="subtext" id="p3-sub">நெல்சன் மண்டேலா பொன்மொழி</div>
+      <button class="speaker-btn" onclick="speakCurrent(3)">🗣️</button>
+    </div>
+    <div class="btn-grid" id="p3-btns"></div>
+    <div class="feedback" id="p3-feed"></div>
+    <div class="card-footer">
+      <button class="nav-arrow-btn" onclick="prevQ(3)">⬅️ முந்தைய கேள்வி</button>
+      <button class="nav-arrow-btn" onclick="nextQ(3)">அடுத்த கேள்வி ➡️</button>
+    </div>
+  </section>
+
+  <!-- SECTION 4: BHARATHIYAR SONG WITH AUDIO FILE -->
+  <section class="game-section" id="sec-4">
+    <div class="hud">
+      <span id="p4-counter">கேள்வி: 1/20</span>
+      <span style="color: #b45309; font-weight: bold;">தமிழ் மொழி வாழ்த்து 📖</span>
+    </div>
+    <div class="book-illustration-stage" id="img-4"></div>
+    
+    <!-- Audio Attachment Player Box -->
+    <div class="song-audio-bar">
+      <div style="font-weight: 700; color: #92400e; font-size: 0.95rem;">
+        🎶 பாரதியார் பாடல் ஒலி வடிவம் (Song Audio Track)
+      </div>
+
+      <audio id="bharathiyar-audio" class="native-player" controls preload="auto">
+        <source src="வாழ்க நிரந்தரம் வாழ்க தமிழ்மொழி வாழிய வாழிய வே  Valka Nirantharam  TKS Matric.mp3" type="audio/mpeg" />
+        <source src="bharathiyar_song.mp3" type="audio/mpeg" />
+        <source src="song.mp3" type="audio/mpeg" />
+        உங்கள் உலாவி audio குறிச்சொல்லை ஆதரிக்கவில்லை.
+      </audio>
+
+      <div class="audio-controls-row">
+        <button class="action-pill secondary" onclick="toggleBharathiyarPlay()">⏯️ இயக்கு / நிறுத்து (Play/Pause)</button>
+        <button class="action-pill" onclick="restartBharathiyarPlay()">🔄 தொடக்கம் (Restart)</button>
+        <button class="action-pill stop-pill" onclick="stopBharathiyarAudio()">⏹️ நிறுத்து (Stop)</button>
+        
+        <!-- Direct File Selector Button in case browser blocks path -->
+        <label class="action-pill file-pill" style="cursor: pointer;">
+          📂 MP3 கோப்பைத் தேர்ந்தெடு
+          <input type="file" id="audio-file-picker" accept="audio/*" style="display:none;" onchange="loadLocalAudioFile(event)" />
+        </label>
+      </div>
+      <div id="audio-status" class="audio-status-msg">
+        💡 கோப்பு தானாக இயங்காவிடில் "📂 MP3 கோப்பைத் தேர்ந்தெடு" அழுத்தி உங்கள் கோப்பை நேரடியாகத் தேர்ந்தெடுக்கலாம்.
+      </div>
+    </div>
+
+    <div class="poem-box">
+      <div class="meter-banner">
+        📜 சந்தக் குறிப்பு: தானே தனத்தன தானே தனத்தன தானே தனதானே! (மகாகவி பாரதியார்)[span_0](start_span)[span_0](end_span)
+      </div>
+      <span class="k-line">1. வாழ்க நிரந்தரம் வாழ்க தமிழ்மொழி வாழிய வாழியவே!</span>
+      <span class="k-line">2. வான மளந்த தனைத்தும் அளந்திடும் வண்மொழி வாழியவே!</span>
+      <span class="k-line">3. ஏழ்கடல் வைப்பினுந் தன்மணம் வீசி இசைகொண்டு வாழியவே!</span>
+      <span class="k-line">4. எங்கள் தமிழ்மொழி எங்கள் தமிழ்மொழி என்றென்றும் வாழியவே!</span>
+      <span class="k-line">5. சூழ்கலி நீங்கத்தமிழ்மொழி ஓங்கத் துலங்குக வையகமே!</span>
+      <span class="k-line">6. தொல்லை வினைதரு தொல்லை யகன்று சுடர்க தமிழ்நாடே!</span>
+      <span class="k-line">7. வாழ்க தமிழ்மொழி வாழ்க தமிழ்மொழி வாழ்க தமிழ்மொழியே!</span>
+      <span class="k-line">8. வானம் அறிந்த தனைத்தும் அறிந்து வளர்மொழி வாழியவே!</span>
+    </div>
+
+    <div class="board" style="min-height: 80px; margin-top: 0.4rem;">
+      <div class="big-word" style="font-size: 1.15rem;" id="p4-word">உலகத் தாய்மொழி தினம் எப்போது?[span_1](start_span)[span_1](end_span)</div>
+      <div class="subtext" id="p4-sub"></div>
+      <button class="speaker-btn" onclick="speakCurrent(4)">🗣️</button>
+    </div>
+    <div class="btn-grid" id="p4-btns"></div>
+    <div class="feedback" id="p4-feed"></div>
+    <div class="card-footer">
+      <button class="nav-arrow-btn" onclick="prevQ(4)">⬅️ முந்தைய கேள்வி</button>
+      <button class="nav-arrow-btn" onclick="nextQ(4)">அடுத்த கேள்வி ➡️</button>
+    </div>
+  </section>
+
+  <!-- SECTION 5 -->
+  <section class="game-section" id="sec-5">
+    <div class="hud"><span id="p5-counter">கேள்வி: 1/20</span><span>சிலந்தி நிலை: <b id="spider-step">0</b>/20</span></div>
+    <div class="book-illustration-stage" id="img-5"></div>
+    <div class="spider-track">
+      <span class="web-top">🕸️ வெற்றி: ஊக்கமது கைவிடேல்[span_2](start_span)[span_2](end_span)!</span>
+      <div class="spider-char" id="spider-char">🕷️</div>
+    </div>
+    <div class="board">
+      <div class="big-word" style="font-size: 1.15rem;" id="p5-word">அரசன் போரில் தோற்றதும் எங்கு சென்றான்?[span_3](start_span)[span_3](end_span)</div>
+      <div class="subtext" id="p5-sub">அரசனும் சிலந்தியும்[span_4](start_span)[span_4](end_span)</div>
+      <button class="speaker-btn" onclick="speakCurrent(5)">🗣️</button>
+    </div>
+    <div class="btn-grid" id="p5-btns"></div>
+    <div class="feedback" id="p5-feed"></div>
+    <div class="card-footer">
+      <button class="nav-arrow-btn" onclick="prevQ(5)">⬅️ முந்தைய கேள்வி</button>
+      <button class="nav-arrow-btn" onclick="nextQ(5)">அடுத்த கேள்வி ➡️</button>
+    </div>
+  </section>
+
+  <!-- SECTION 6: THIRUKKURAL RECONSTRUCTION STAGE -->
+  <section class="game-section" id="sec-6">
+    <div class="hud">
+      <span id="p6-counter">பயிற்சி: 1/20</span>
+      <span id="p6-score">புள்ளிகள்: 0</span>
+    </div>
+    <div class="book-illustration-stage" id="img-6"></div>
+
+    <div class="kural-stage">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.9rem; font-weight:bold; color:var(--kural-gold);" id="kural-mode-title">சீர் பலகை:</span>
+        <button class="action-pill" style="padding:0.25rem 0.6rem; font-size:0.8rem;" onclick="speakCurrentKural()">🔊 முழு குறள் வாசி</button>
+      </div>
+
+      <div class="kural-line-block" id="line-1-slots"></div>
+      <div class="kural-line-block" id="line-2-slots"></div>
+      <div class="meaning-card" id="kural-meaning-box"></div>
+
+      <div style="font-size:0.85rem; font-weight:bold; color:#78350f; text-align:center;">கீழுள்ள சொல் கட்டிகளில் சரியானதைச் சொடுக்குக:</div>
+      <div class="word-dock" id="kural-word-dock"></div>
+    </div>
+
+    <div class="feedback" id="p6-feed"></div>
+
+    <div class="card-footer">
+      <button class="nav-arrow-btn" onclick="prevKuralTask()">⬅️ முந்தைய குறள் பயிற்சி</button>
+      <button class="nav-arrow-btn" onclick="nextKuralTask()">அடுத்த குறள் பயிற்சி ➡️</button>
+    </div>
+  </section>
+
+  <script>
+    let currentLiveAudio = null;
+
+    function getSongAudio() {
+      return document.getElementById('bharathiyar-audio');
+    }
+
+    function loadLocalAudioFile(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const audio = getSongAudio();
+        const objUrl = URL.createObjectURL(file);
+        audio.src = objUrl;
+        audio.load();
+        document.getElementById('audio-status').innerText = `✅ "${file.name}" இணைக்கப்பட்டது! பாடல் தொடங்குகிறது...`;
+        document.getElementById('audio-status').style.color = "#15803d";
+        toggleBharathiyarPlay();
+      }
+    }
+
+    function toggleBharathiyarPlay() {
+      const audio = getSongAudio();
+      const status = document.getElementById('audio-status');
+      if (!audio) return;
+
+      if (currentLiveAudio) {
+        currentLiveAudio.pause();
+        currentLiveAudio.currentTime = 0;
+      }
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+      if (audio.paused) {
+        audio.play().then(() => {
+          status.innerText = "🎶 பாடல் ஒலிக்கிறது...";
+          status.style.color = "#15803d";
+        }).catch(err => {
+          status.innerText = "⚠️ பாடல் கோப்பு கிடைக்கவில்லை. கீழே உள்ள '📂 MP3 கோப்பைத் தேர்ந்தெடு' பொத்தானை அழுத்தி கோப்பைத் தேர்ந்தெடுக்கவும்.";
+          status.style.color = "#b91c1c";
+        });
+      } else {
+        audio.pause();
+        status.innerText = "⏸️ பாடல் நிறுத்தப்பட்டது (Paused).";
+        status.style.color = "#b45309";
+      }
+    }
+
+    function restartBharathiyarPlay() {
+      const audio = getSongAudio();
+      if (!audio) return;
+      if (currentLiveAudio) {
+        currentLiveAudio.pause();
+        currentLiveAudio.currentTime = 0;
+      }
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      audio.currentTime = 0;
+      toggleBharathiyarPlay();
+    }
+
+    function stopBharathiyarAudio() {
+      const audio = getSongAudio();
+      const status = document.getElementById('audio-status');
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+        status.innerText = "⏹️ பாடல் முழுமையாக நிறுத்தப்பட்டது.";
+        status.style.color = "#b45309";
+      }
+    }
+
+    function gotoSongAndPlay() {
+      setPage(4);
+      setTimeout(() => {
+        restartBharathiyarPlay();
+      }, 250);
+    }
+
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function speakHumanTamil(text, onDone = null) {
+      const songAudio = getSongAudio();
+      if (songAudio && !songAudio.paused) {
+        songAudio.pause();
+      }
+      if (currentLiveAudio) {
+        currentLiveAudio.pause();
+        currentLiveAudio.currentTime = 0;
+      }
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+      const cleanText = encodeURIComponent(text.trim());
+      const cloudAudioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ta-IN&client=tw-ob&q=${cleanText}`;
+
+      const audio = new Audio(cloudAudioUrl);
+      audio.playbackRate = 0.90;
+      currentLiveAudio = audio;
+
+      audio.onended = () => { if (onDone) onDone(); };
+      audio.onerror = () => {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ta-IN';
+        u.rate = 0.72;
+        u.onend = () => { if (onDone) onDone(); };
+        window.speechSynthesis.speak(u);
+      };
+
+      audio.play().catch(() => {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'ta-IN';
+        u.rate = 0.72;
+        u.onend = () => { if (onDone) onDone(); };
+        window.speechSynthesis.speak(u);
+      });
+    }
+
+    function testRealVoice() {
+      speakHumanTamil("வணக்கம்! வள்ளுவன் தமிழ் மையம், நிலை ஐந்து பாடம் ஒன்று. உச்சரிப்பு தெளிவாக உள்ளதா?");
+    }
+
+    function setPage(index) {
+      stopBharathiyarAudio();
+      if (currentLiveAudio) currentLiveAudio.pause();
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      document.querySelectorAll('.nav-btn').forEach((b, i) => b.classList.toggle('active', i === index));
+      document.querySelectorAll('.game-section').forEach((s, i) => s.classList.toggle('active', i === index));
+      if (index === 6) renderKuralTask();
+    }
+
+    /* SVG ARTWORK */
+    const bookArtwork = {
+      page1Chart: `<svg viewBox="0 0 700 180" style="background:#ffffff; font-family:sans-serif;">
+        <rect x="10" y="8" width="680" height="24" rx="6" fill="#fdf2f8"/>
+        <text x="350" y="24" font-size="12" font-weight="bold" fill="#be185d" text-anchor="middle">இலக்கண மீள்பார்வை: இடம், காலம், எண், திணை மற்றும் பால்</text>
+        <rect x="30" y="42" width="180" height="30" rx="15" fill="#ffffff" stroke="#475569" stroke-width="1.5"/>
+        <text x="120" y="62" font-size="13" font-weight="bold" fill="#0f172a" text-anchor="middle">இடம் (மூன்று)</text>
+        <line x1="120" y1="72" x2="120" y2="85" stroke="#475569" stroke-width="1.5"/><line x1="45" y1="85" x2="195" y2="85" stroke="#475569" stroke-width="1.5"/>
+        <line x1="45" y1="85" x2="45" y2="95" stroke="#475569" stroke-width="1.5"/><line x1="120" y1="85" x2="120" y2="95" stroke="#475569" stroke-width="1.5"/><line x1="195" y1="85" x2="195" y2="95" stroke="#475569" stroke-width="1.5"/>
+        <rect x="15" y="95" width="60" height="75" rx="6" fill="#f1f5f9" stroke="#94a3b8"/><text x="45" y="112" font-size="11" font-weight="bold" fill="#1e293b" text-anchor="middle">தன்மை</text><text x="45" y="127" font-size="9" fill="#64748b" text-anchor="middle">(1st Person)</text><text x="45" y="145" font-size="10" fill="#0369a1" text-anchor="middle">நான், நாம்</text><text x="45" y="160" font-size="10" fill="#0369a1" text-anchor="middle">நாங்கள்</text>
+        <rect x="90" y="95" width="60" height="75" rx="6" fill="#f1f5f9" stroke="#94a3b8"/><text x="120" y="112" font-size="11" font-weight="bold" fill="#1e293b" text-anchor="middle">முன்னிலை</text><text x="120" y="127" font-size="9" fill="#64748b" text-anchor="middle">(2nd Person)</text><text x="120" y="145" font-size="10" fill="#0369a1" text-anchor="middle">நீ</text><text x="120" y="160" font-size="10" fill="#0369a1" text-anchor="middle">நீங்கள்</text>
+        <rect x="165" y="95" width="60" height="75" rx="6" fill="#f1f5f9" stroke="#94a3b8"/><text x="195" y="112" font-size="11" font-weight="bold" fill="#1e293b" text-anchor="middle">படர்க்கை</text><text x="195" y="127" font-size="9" fill="#64748b" text-anchor="middle">(3rd Person)</text><text x="195" y="145" font-size="9" fill="#0369a1" text-anchor="middle">அவன், அவள்</text><text x="195" y="160" font-size="9" fill="#0369a1" text-anchor="middle">அவர், அது</text>
+        <rect x="260" y="42" width="180" height="30" rx="15" fill="#ffffff" stroke="#475569" stroke-width="1.5"/><text x="350" y="62" font-size="13" font-weight="bold" fill="#0f172a" text-anchor="middle">காலம் (மூன்று)</text>
+        <line x1="350" y1="72" x2="350" y2="85" stroke="#475569" stroke-width="1.5"/><line x1="275" y1="85" x2="425" y2="85" stroke="#475569" stroke-width="1.5"/>
+        <line x1="275" y1="85" x2="275" y2="95" stroke="#475569" stroke-width="1.5"/><line x1="350" y1="85" x2="350" y2="95" stroke="#475569" stroke-width="1.5"/><line x1="425" y1="85" x2="425" y2="95" stroke="#475569" stroke-width="1.5"/>
+        <ellipse cx="275" cy="118" rx="36" ry="22" fill="#fed7aa" stroke="#ea580c"/><text x="275" y="115" font-size="9" font-weight="bold" fill="#9a3412" text-anchor="middle">கடந்த காலம்</text><text x="275" y="128" font-size="9" fill="#7c2d12" text-anchor="middle">படித்தீர்கள்</text>
+        <ellipse cx="350" cy="118" rx="36" ry="22" fill="#fed7aa" stroke="#ea580c"/><text x="350" y="115" font-size="9" font-weight="bold" fill="#9a3412" text-anchor="middle">நிகழ்காலம்</text><text x="350" y="128" font-size="9" fill="#7c2d12" text-anchor="middle">படிக்கிறீர்கள்</text>
+        <ellipse cx="425" cy="118" rx="36" ry="22" fill="#fed7aa" stroke="#ea580c"/><text x="425" y="115" font-size="9" font-weight="bold" fill="#9a3412" text-anchor="middle">எதிர்காலம்</text><text x="425" y="128" font-size="9" fill="#7c2d12" text-anchor="middle">படிப்பீர்கள்</text>
+        <rect x="490" y="42" width="180" height="30" rx="15" fill="#ffffff" stroke="#475569" stroke-width="1.5"/><text x="580" y="62" font-size="13" font-weight="bold" fill="#0f172a" text-anchor="middle">எண் (இரண்டு)</text>
+        <line x1="580" y1="72" x2="580" y2="85" stroke="#475569" stroke-width="1.5"/><line x1="535" y1="85" x2="635" y2="85" stroke="#475569" stroke-width="1.5"/>
+        <line x1="535" y1="85" x2="535" y2="95" stroke="#475569" stroke-width="1.5"/><line x1="635" y1="85" x2="635" y2="95" stroke="#475569" stroke-width="1.5"/>
+        <text x="535" y="110" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">ஒருமை</text>
+        <circle cx="535" cy="135" r="18" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+        <circle cx="529" cy="130" r="2.5" fill="#000"/><circle cx="541" cy="130" r="2.5" fill="#000"/><path d="M 529 140 Q 535 147 541 140" stroke="#000" stroke-width="2" fill="none"/>
+        <text x="535" y="168" font-size="9" fill="#475569" text-anchor="middle">சிறுவன், குதிரை</text>
+        <text x="635" y="110" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">பன்மை</text>
+        <circle cx="620" cy="126" r="10" fill="#facc15" stroke="#ca8a04"/><circle cx="635" cy="122" r="10" fill="#facc15" stroke="#ca8a04"/><circle cx="650" cy="126" r="10" fill="#facc15" stroke="#ca8a04"/><circle cx="627" cy="144" r="10" fill="#facc15" stroke="#ca8a04"/><circle cx="643" cy="144" r="10" fill="#facc15" stroke="#ca8a04"/>
+        <text x="635" y="168" font-size="9" fill="#475569" text-anchor="middle">சிறுவர்கள், குதிரைகள்</text>
+      </svg>`,
+
+      page2Gender: `<svg viewBox="0 0 700 180" style="background:#fefce8; font-family:sans-serif;">
+        <rect x="20" y="12" width="310" height="90" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+        <text x="175" y="32" font-size="13" font-weight="bold" fill="#1e3a8a" text-anchor="middle">உயர்திணை (Masculine / Feminine / Plural)</text>
+        <text x="35" y="55" font-size="11" fill="#334155">➤ ஆண்பால்: அப்பா, குமரன், தோழன், மாணவன்</text>
+        <text x="35" y="73" font-size="11" fill="#334155">➤ பெண்பால்: அக்கா, கமலா, தோழி, மாணவி</text>
+        <text x="35" y="91" font-size="11" fill="#334155">➤ பலர்பால்: மாணவர்கள், மருத்துவர்கள், ஆசிரியர்கள்</text>
+        <rect x="360" y="12" width="320" height="90" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+        <text x="520" y="32" font-size="13" font-weight="bold" fill="#14532d" text-anchor="middle">அஃறிணை (Neuter Gender)</text>
+        <text x="375" y="58" font-size="11" fill="#334155">➤ ஒன்றன்பால்: மான், பறவை, மரம், பூ</text>
+        <text x="375" y="82" font-size="11" fill="#334155">➤ பலவின்பால்: மான்கள், புலிகள், மயில்கள், பூக்கள்</text>
+        <rect x="20" y="112" width="660" height="56" rx="8" fill="#fdf2f8" stroke="#f43f5e" stroke-width="1.5"/>
+        <text x="350" y="132" font-size="13" font-weight="bold" fill="#be123c" text-anchor="middle">💡 உங்களுக்குத் தெரியுமா?[span_5](start_span)[span_5](end_span)</text>
+        <text x="350" y="153" font-size="12" fill="#881337" text-anchor="middle">தமிழ் மொழியில் உள்ள 'ல'கரம், 'ள'கரம் மற்றும் சிறப்பு 'ழ'கரம் ஆகிய மூன்று எழுத்துக்களும் அமைந்த சொல் - <tspan font-weight="bold" fill="#e11d48">தொழிலாளி</tspan>.[span_6](start_span)[span_6](end_span)</text>
+      </svg>`,
+
+      page3Verbs: `<svg viewBox="0 0 700 180" style="background:#f0fdfa; font-family:sans-serif;">
+        <rect x="20" y="10" width="660" height="30" rx="6" fill="#ccfbf1"/>
+        <text x="350" y="30" font-size="13" font-weight="bold" fill="#0f766e" text-anchor="middle">முக்காலங்கள் பயிற்சி: வினைச்சொற்கள் வங்கி (Verb Bank)</text>
+        <g transform="translate(30, 52)">
+          <rect width="90" height="110" rx="8" fill="#ffffff" stroke="#0d9488"/><circle cx="45" cy="40" r="22" fill="#fef08a" stroke="#ca8a04"/><circle cx="38" cy="35" r="2.5"/><circle cx="52" cy="35" r="2.5"/><path d="M 36 45 Q 45 56 54 45 Z" fill="#e11d48"/>
+          <text x="45" y="82" font-size="14" font-weight="bold" fill="#0f766e" text-anchor="middle">1. சிரி</text><text x="45" y="98" font-size="10" fill="#64748b" text-anchor="middle">(Laugh)</text>
+        </g>
+        <g transform="translate(140, 52)">
+          <rect width="90" height="110" rx="8" fill="#ffffff" stroke="#0d9488"/><ellipse cx="45" cy="45" rx="18" ry="12" fill="#fed7aa"/><circle cx="30" cy="38" r="10" fill="#fed7aa"/>
+          <text x="45" y="82" font-size="14" font-weight="bold" fill="#0f766e" text-anchor="middle">2. தவழ்</text><text x="45" y="98" font-size="10" fill="#64748b" text-anchor="middle">(Crawl)</text>
+        </g>
+        <g transform="translate(250, 52)">
+          <rect width="90" height="110" rx="8" fill="#ffffff" stroke="#0d9488"/><circle cx="45" cy="35" r="14" fill="#fbcfe8" stroke="#db2777"/><path d="M 25 55 Q 45 35 65 55" stroke="#db2777" stroke-width="3" fill="none"/>
+          <text x="45" y="82" font-size="14" font-weight="bold" fill="#0f766e" text-anchor="middle">3. தொடு</text><text x="45" y="98" font-size="10" fill="#64748b" text-anchor="middle">(Touch)</text>
+        </g>
+        <g transform="translate(360, 52)">
+          <rect width="90" height="110" rx="8" fill="#ffffff" stroke="#0d9488"/><ellipse cx="45" cy="50" rx="32" ry="12" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/><path d="M 18 35 L 22 50 M 72 35 L 68 50" stroke="#0284c7" stroke-width="2"/>
+          <text x="45" y="82" font-size="14" font-weight="bold" fill="#0f766e" text-anchor="middle">4. நிரப்பு</text><text x="45" y="98" font-size="10" fill="#64748b" text-anchor="middle">(Fill)</text>
+        </g>
+        <g transform="translate(470, 52)">
+          <rect width="90" height="110" rx="8" fill="#ffffff" stroke="#0d9488"/><path d="M 25 45 L 60 45 M 50 35 L 65 45 L 50 55" stroke="#0284c7" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <text x="45" y="82" font-size="14" font-weight="bold" fill="#0f766e" text-anchor="middle">5. புறப்படு</text><text x="45" y="98" font-size="10" fill="#64748b" text-anchor="middle">(Start/Depart)</text>
+        </g>
+        <g transform="translate(580, 52)">
+          <rect width="90" height="110" rx="8" fill="#ffffff" stroke="#0d9488"/><rect x="32" y="38" width="26" height="20" rx="3" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/><path d="M 37 38 A 8 8 0 0 1 53 38" fill="none" stroke="#ca8a04" stroke-width="2.5"/>
+          <text x="45" y="82" font-size="14" font-weight="bold" fill="#0f766e" text-anchor="middle">6. பூட்டு</text><text x="45" y="98" font-size="10" fill="#64748b" text-anchor="middle">(Lock)</text>
+        </g>
+      </svg>`,
+
+      page4Mother: `<svg viewBox="0 0 700 180" style="background:#fff7ed; font-family:sans-serif;">
+        <g transform="translate(40, 15)">
+          <circle cx="80" cy="55" r="30" fill="#fed7aa" stroke="#ea580c" stroke-width="1.5"/>
+          <path d="M 50 120 Q 80 85 110 120 Z" fill="#f97316"/>
+          <circle cx="95" cy="45" r="4" fill="#ea580c"/>
+          <circle cx="135" cy="80" r="20" fill="#fed7aa" stroke="#ea580c" stroke-width="1.5"/>
+          <path d="M 115 130 Q 135 105 155 130 Z" fill="#0284c7"/>
+          <path d="M 95 105 Q 115 95 125 110" stroke="#fed7aa" stroke-width="4" fill="none"/>
+        </g>
+        <text x="360" y="65" font-size="44" font-weight="900" fill="#b45309" letter-spacing="4">த மி ழ்</text>
+        <text x="360" y="95" font-size="16" font-weight="bold" fill="#c2410c">பாடம் - 1 : தாய்மொழி நம் அடையாளம்</text>
+        <rect x="230" y="112" width="440" height="52" rx="8" fill="#ffedd5" stroke="#f97316" stroke-width="1.2"/>
+        <text x="245" y="130" font-size="11" fill="#7c2d12" font-style="italic">"ஒருவரின் புத்தியைத் தொட அவருக்குப் புரியும் மொழியில் பேசு.[span_7](start_span)[span_7](end_span)</text>
+        <text x="245" y="148" font-size="11" font-weight="bold" fill="#9a3412">ஆனால் அவர் இதயத்தைத் தொட அவரின் தாய்மொழியில் பேச வேண்டும்[span_8](start_span)!"[span_8](end_span)</text>
+        <text x="655" y="158" font-size="9" fill="#c2410c" text-anchor="end">- நெல்சன் மண்டேலா[span_9](start_span)[span_9](end_span)</text>
+      </svg>`,
+
+      page5Poem: `<svg viewBox="0 0 700 180" style="background:#fefce8; font-family:sans-serif;">
+        <g transform="translate(30, 20)">
+          <rect width="130" height="135" rx="8" fill="#ffffff" stroke="#ef4444" stroke-width="2" stroke-dasharray="5 3"/>
+          <text x="65" y="32" font-size="11" font-weight="bold" fill="#dc2626" text-anchor="middle">உலக</text>
+          <text x="65" y="52" font-size="13" font-weight="bold" fill="#b91c1c" text-anchor="middle">தாய்மொழி</text>
+          <text x="65" y="70" font-size="13" font-weight="bold" fill="#b91c1c" text-anchor="middle">தினம்</text>
+          <text x="65" y="105" font-size="30" font-weight="900" fill="#dc2626" text-anchor="middle">21</text>
+          <text x="65" y="125" font-size="12" font-weight="bold" fill="#7f1d1d" text-anchor="middle">பிப்ரவரி</text>
+        </g>
+        <g transform="translate(190, 15)">
+          <circle cx="70" cy="75" r="38" fill="#fed7aa"/>
+          <path d="M 28 65 Q 70 15 112 65 Q 70 45 28 65" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+          <path d="M 45 88 Q 70 82 95 88 Q 70 102 45 88" fill="#0f172a"/>
+          <rect x="67" y="50" width="5" height="16" fill="#dc2626"/>
+          <ellipse cx="56" cy="68" rx="4" ry="2" fill="#000"/><ellipse cx="84" cy="68" rx="4" ry="2" fill="#000"/>
+        </g>
+        <g transform="translate(340, 25)">
+          <text x="0" y="24" font-size="17" font-weight="bold" fill="#854d0e">மகாகவி சுப்பிரமணிய பாரதியார்</text>
+          <text x="0" y="52" font-size="15" font-weight="bold" fill="#b45309">"வாழ்க நிரந்தரம் வாழ்க தமிழ்மொழி வாழிய வாழியவே[span_10](start_span)[span_10](end_span)!</text>
+          <text x="0" y="76" font-size="15" font-weight="bold" fill="#b45309">வான மளந்த தனைத்தும் அளந்திடும் வண்மொழி வாழியவே[span_11](start_span)!"[span_11](end_span)</text>
+          <rect y="95" width="320" height="28" rx="6" fill="#fef08a"/>
+          <text x="160" y="114" font-size="11" font-weight="bold" fill="#713f12" text-anchor="middle">"தமிழுக்கும் அமுதென்று பேர்" - பாரதிதாசன்[span_12](start_span)[span_12](end_span)</text>
+        </g>
+      </svg>`,
+
+      page6Spider: `<svg viewBox="0 0 700 180" style="background:#f1f5f9; font-family:sans-serif;">
+        <g transform="translate(15, 10)">
+          <path d="M 0 155 Q 120 10 240 155 Z" fill="#334155"/>
+          <circle cx="95" cy="105" r="15" fill="#fed7aa"/>
+          <path d="M 87 90 L 95 82 L 103 90 Z" fill="#facc15"/>
+          <path d="M 75 145 L 95 120 L 115 145 Z" fill="#dc2626"/>
+          <text x="95" y="152" font-size="9" fill="#ffffff" text-anchor="middle">சிந்தனையில் அரசர்</text>
+          <line x1="160" y1="30" x2="210" y2="90" stroke="#cbd5e1" stroke-width="1.5"/>
+          <line x1="210" y1="30" x2="160" y2="90" stroke="#cbd5e1" stroke-width="1.5"/>
+          <ellipse cx="185" cy="60" rx="8" ry="6" fill="#0f172a"/>
+          <text x="185" y="105" font-size="9" font-weight="bold" fill="#f8fafc" text-anchor="middle">விடாமுயற்சி சிலந்தி[span_13](start_span)[span_13](end_span)</text>
+        </g>
+        <path d="M 285 85 L 345 85 M 330 70 L 350 85 L 330 100" stroke="#4f46e5" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <text x="315" y="65" font-size="10" font-weight="bold" fill="#4338ca" text-anchor="middle">ஊக்கம்!</text>
+        <g transform="translate(380, 15)">
+          <rect width="290" height="145" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+          <text x="145" y="28" font-size="13" font-weight="bold" fill="#15803d" text-anchor="middle">போரில் வென்று அரசை மீட்டான்[span_14](start_span)[span_14](end_span)!</text>
+          <circle cx="90" cy="70" r="14" fill="#fed7aa"/><path d="M 82 56 L 90 48 L 98 56 Z" fill="#facc15"/>
+          <line x1="98" y1="62" x2="135" y2="45" stroke="#64748b" stroke-width="3"/>
+          <rect x="130" y="40" width="10" height="3" fill="#eab308" transform="rotate(-25 130 40)"/>
+          <text x="145" y="105" font-size="13" font-weight="bold" fill="#b91c1c" text-anchor="middle">நீதி: முயன்றால் முடியாதது எதுவும் இல்லை[span_15](start_span)[span_15](end_span)</text>
+          <text x="145" y="125" font-size="10" fill="#475569" text-anchor="middle">குறள் 620: "உலைவின்றித் தாழாது உஞற்று பவர்[span_16](start_span)"[span_16](end_span)</text>
+        </g>
+      </svg>`,
+
+      thirukkuralArt: `<svg viewBox="0 0 700 180" style="background:#fffbeb; font-family:sans-serif;">
+        <rect x="15" y="10" width="670" height="160" rx="8" fill="#ffffff" stroke="#b45309" stroke-width="2"/>
+        <rect x="250" y="18" width="200" height="26" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
+        <text x="350" y="36" font-size="14" font-weight="bold" fill="#92400e" text-anchor="middle">திருக்குறள் (ஆள்வினையுடைமை)</text>
+        <rect x="30" y="52" width="640" height="52" rx="6" fill="#fefce8" stroke="#fde047"/>
+        <text x="45" y="70" font-size="12" font-weight="bold" fill="#854d0e">குறள் 616: "முயற்சி திருவினை யாக்கும் முயற்றின்மை இன்மை புகுத்தி விடும்.[span_17](start_span)"[span_17](end_span)</text>
+        <text x="45" y="90" font-size="11" fill="#713f12">பொருள்: முயற்சி செய்தால் முடியாதது எதுவும் இல்லை. முயலாமை துன்பத்தைத் தரும்.[span_18](start_span)[span_18](end_span)</text>
+        <rect x="30" y="110" width="640" height="52" rx="6" fill="#fefce8" stroke="#fde047"/>
+        <text x="45" y="128" font-size="12" font-weight="bold" fill="#854d0e">குறள் 620: "ஊழையும் உப்பக்கம் காண்பர் உலைவின்றித் தாழாது உஞற்று பவர்.[span_19](start_span)"[span_19](end_span)</text>
+        <text x="45" y="148" font-size="11" fill="#713f12">பொருள்: சோர்வில்லாமல் முயற்சி செய்பவர்கள், இடையூறாக வரும் ஊழையும் தோல்வியடையச் செய்வர்.</text>
+      </svg>`
+    };
+
+    function initImages() {
+      document.getElementById('img-0').innerHTML = bookArtwork.page1Chart;
+      document.getElementById('img-1').innerHTML = bookArtwork.page2Gender;
+      document.getElementById('img-2').innerHTML = bookArtwork.page3Verbs;
+      document.getElementById('img-3').innerHTML = bookArtwork.page4Mother;
+      document.getElementById('img-4').innerHTML = bookArtwork.page5Poem;
+      document.getElementById('img-5').innerHTML = bookArtwork.page6Spider;
+      document.getElementById('img-6').innerHTML = bookArtwork.thirukkuralArt;
+    }
+
+    /* QUESTION DATA */
+    const q0 = [
+      { w: "நான்", sub: "I / Me", opts: ["தன்மை", "முன்னிலை", "படர்க்கை"], a: "தன்மை" },
+      { w: "நீ", sub: "You", opts: ["தன்மை", "முன்னிலை", "படர்க்கை"], a: "முன்னிலை" },
+      { w: "அவன்", sub: "He", opts: ["தன்மை", "முன்னிலை", "படர்க்கை"], a: "படர்க்கை" },
+      { w: "நாங்கள்", sub: "We", opts: ["தன்மை", "முன்னிலை", "படர்க்கை"], a: "தன்மை" },
+      { w: "நாம்", sub: "We (Inclusive)", opts: ["தன்மை", "முன்னிலை", "படர்க்கை"], a: "தன்மை" },
+      { w: "நீங்கள்", sub: "You all", opts: ["தன்மை", "முன்னிலை", "படர்க்கை"], a: "முன்னிலை" },
+      { w: "அவள்", sub: "She", opts: ["தன்மை", "முன்னிலை", "படர்க்கை"], a: "படர்க்கை" },
+      { w: "அவர்கள்", sub: "They", opts: ["தன்மை", "முன்னிலை", "படர்க்கை"], a: "படர்க்கை" },
+      { w: "அது", sub: "It (Animal/Object)", opts: ["தன்மை", "முன்னிலை", "படர்க்கை"], a: "படர்க்கை" },
+      { w: "அவை", sub: "Those (Neuter Plural)", opts: ["தன்மை", "முன்னிலை", "படர்க்கை"], a: "படர்க்கை" },
+      { w: "படித்தீர்கள்", sub: "You read (Past)", opts: ["இறந்தகாலம்", "நிகழ்காலம்", "எதிர்காலம்"], a: "இறந்தகாலம்" },
+      { w: "படிக்கிறீர்கள்", sub: "You are reading (Present)", opts: ["இறந்தகாலம்", "நிகழ்காலம்", "எதிர்காலம்"], a: "நிகழ்காலம்" },
+      { w: "படிப்பீர்கள்", sub: "You will read (Future)", opts: ["இறந்தகாலம்", "நிகழ்காலம்", "எதிர்காலம்"], a: "எதிர்காலம்" },
+      { w: "சிறுவன்", sub: "Boy", opts: ["ஒருமை", "பன்மை"], a: "ஒருமை" },
+      { w: "சிறுவர்கள்", sub: "Boys", opts: ["ஒருமை", "பன்மை"], a: "பன்மை" },
+      { w: "குதிரை", sub: "Horse", opts: ["ஒருமை", "பன்மை"], a: "ஒருமை" },
+      { w: "குதிரைகள்", sub: "Horses", opts: ["ஒருமை", "பன்மை"], a: "பன்மை" },
+      { w: "பழம்", sub: "Fruit", opts: ["ஒருமை", "பன்மை"], a: "ஒருமை" },
+      { w: "பழங்கள்", sub: "Fruits", opts: ["ஒருமை", "பன்மை"], a: "பன்மை" },
+      { w: "பள்ளி", sub: "School", opts: ["ஒருமை", "பன்மை"], a: "ஒருமை" }
+    ];
+    let idx0 = 0, score0 = 0;
+
+    const q1 = [
+      { w: "அப்பா", sub: "Father", opts: ["உயர்திணை", "அஃறிணை"], a: "உயர்திணை" },
+      { w: "மான்", sub: "Deer", opts: ["உயர்திணை", "அஃறிணை"], a: "அஃறிணை" },
+      { w: "குமரன்", sub: "Kumaran", opts: ["ஆண்பால்", "பெண்பால்", "பலர்பால்"], a: "ஆண்பால்" },
+      { w: "தோழன்", sub: "Male Friend", opts: ["ஆண்பால்", "பெண்பால்", "பலர்பால்"], a: "ஆண்பால்" },
+      { w: "மாணவன்", sub: "Male Student", opts: ["ஆண்பால்", "பெண்பால்", "பலர்பால்"], a: "ஆண்பால்" },
+      { w: "அக்கா", sub: "Elder Sister", opts: ["ஆண்பால்", "பெண்பால்", "பலர்பால்"], a: "பெண்பால்" },
+      { w: "கமலா", sub: "Kamala", opts: ["ஆண்பால்", "பெண்பால்", "பலர்பால்"], a: "பெண்பால்" },
+      { w: "தோழி", sub: "Female Friend", opts: ["ஆண்பால்", "பெண்பால்", "பலர்பால்"], a: "பெண்பால்" },
+      { w: "மாணவி", sub: "Female Student", opts: ["ஆண்பால்", "பெண்பால்", "பலர்பால்"], a: "பெண்பால்" },
+      { w: "மாணவர்கள்", sub: "Students", opts: ["ஆண்பால்", "பெண்பால்", "பலர்பால்"], a: "பலர்பால்" },
+      { w: "மருத்துவர்கள்", sub: "Doctors", opts: ["ஆண்பால்", "பெண்பால்", "பலர்பால்"], a: "பலர்பால்" },
+      { w: "ஆசிரியர்கள்", sub: "Teachers", opts: ["ஆண்பால்", "பெண்பால்", "பலர்பால்"], a: "பலர்பால்" },
+      { w: "மரம்", sub: "Tree", opts: ["ஒன்றன்பால்", "பலவின்பால்"], a: "ஒன்றன்பால்" },
+      { w: "புலிகள்", sub: "Tigers", opts: ["ஒன்றன்பால்", "பலவின்பால்"], a: "பலவின்பால்" },
+      { w: "மயில்கள்", sub: "Peacocks", opts: ["ஒன்றன்பால்", "பலவின்பால்"], a: "பலவின்பால்" },
+      { w: "பூக்கள்", sub: "Flowers", opts: ["ஒன்றன்பால்", "பலவின்பால்"], a: "பலவின்பால்" },
+      { w: "நான் + கல் (Past விகுதி)", sub: "I learned", opts: ["-ஏன் (கற்றேன்)", "-ஆய்", "-ஆன்"], a: "-ஏன் (கற்றேன்)" },
+      { w: "அவள் + கல் (Future விகுதி)", sub: "She will learn", opts: ["-ஆள் (கற்பாள்)", "-ஆன்", "-ஆர்கள்"], a: "-ஆள் (கற்பாள்)" },
+      { w: "அவர்கள் + கல் (Future விகுதி)", sub: "They will learn", opts: ["-ஆர்கள் (கற்பார்கள்)", "-ஆன்", "-ஓம்"], a: "-ஆர்கள் (கற்பார்கள்)" },
+      { w: "‘ல’, ‘ள’, ‘ழ’ மூன்றும் உள்ள சொல் எது?", sub: "Fun Fact", opts: ["தொழிலாளி", "பள்ளி", "வாழைப்பழம்"], a: "தொழிலாளி" }
+    ];
+    let idx1 = 0, score1 = 0;
+
+    const q2 = [
+      { w: "I filled my bathtub with water", sub: "வேர்ச்சொல்: நிரப்பு (Past)", opts: ["நிரப்பினேன்", "நிரப்புகிறேன்", "நிரப்புவேன்"], a: "நிரப்பினேன்" },
+      { w: "The dog touched his toy", sub: "வேர்ச்சொல்: தொடு (Past)", opts: ["தொட்டது", "தொடுகிறது", "தொடும்"], a: "தொட்டது" },
+      { w: "He locks the front door", sub: "வேர்ச்சொல்: பூட்டு (Present)", opts: ["பூட்டுகிறான்", "பூட்டினான்", "பூட்டுவான்"], a: "பூட்டுகிறான்" },
+      { w: "She is laughing", sub: "வேர்ச்சொல்: சிரி (Present)", opts: ["சிரிக்கிறாள்", "சிரித்தாள்", "சிரிப்பாள்"], a: "சிரிக்கிறாள்" },
+      { w: "The baby will crawl", sub: "வேர்ச்சொல்: தவழ் (Future)", opts: ["தவழும்", "தவழ்ந்தது", "தவழ்கிறது"], a: "தவழும்" },
+      { w: "They will start soon", sub: "வேர்ச்சொல்: புறப்படு (Future)", opts: ["புறப்படுவார்கள்", "புறப்பட்டார்கள்", "புறப்படுகிறார்கள்"], a: "புறப்படுவார்கள்" },
+      { w: "We laughed happily", sub: "வேர்ச்சொல்: சிரி (Past)", opts: ["சிரித்தோம்", "சிரிக்கிறோம்", "சிரிப்போம்"], a: "சிரித்தோம்" },
+      { w: "You crawl on the floor", sub: "வேர்ச்சொல்: தவழ் (Present)", opts: ["தவழ்கிறாய்", "தவழ்ந்தாய்", "தவழ்வாய்"], a: "தவழ்கிறாய்" },
+      { w: "He touched the ball", sub: "வேர்ச்சொல்: தொடு (Past)", opts: ["தொட்டான்", "தொடுகிறான்", "தொடுவான்"], a: "தொட்டான்" },
+      { w: "She will lock the door", sub: "வேர்ச்சொல்: பூட்டு (Future)", opts: ["பூட்டுவாள்", "பூட்டினாள்", "பூட்டுகிறாள்"], a: "பூட்டுவாள்" },
+      { w: "They are starting now", sub: "வேர்ச்சொல்: புறப்படு (Present)", opts: ["புறப்படுகிறார்கள்", "புறப்பட்டார்கள்", "புறப்படுவார்கள்"], a: "புறப்படுகிறார்கள்" },
+      { w: "I will fill the bottle", sub: "வேர்ச்சொல்: நிரப்பு (Future)", opts: ["நிரப்புவேன்", "நிரப்பினேன்", "நிரப்புகிறேன்"], a: "நிரப்புவேன்" },
+      { w: "You (plural) laugh", sub: "வேர்ச்சொல்: சிரி (Present)", opts: ["சிரிக்கிறீர்கள்", "சிரித்தீர்கள்", "சிரிப்பீர்கள்"], a: "சிரிக்கிறீர்கள்" },
+      { w: "The cat touches milk", sub: "வேர்ச்சொல்: தொடு (Present)", opts: ["தொடுகிறது", "தொட்டது", "தொடும்"], a: "தொடுகிறது" },
+      { w: "He locked yesterday", sub: "வேர்ச்சொல்: பூட்டு (Past)", opts: ["பூட்டினான்", "பூட்டுகிறான்", "பூட்டுவான்"], a: "பூட்டினான்" },
+      { w: "Babies crawled", sub: "வேர்ச்சொல்: தவழ் (Past)", opts: ["தவழ்ந்தன", "தவழ்கின்றன", "தவழும்"], a: "தவழ்ந்தன" },
+      { w: "I am filling water now", sub: "வேர்ச்சொல்: நிரப்பு (Present)", opts: ["நிரப்புகிறேன்", "நிரப்பினேன்", "நிரப்புவேன்"], a: "நிரப்புகிறேன்" },
+      { w: "You touched the book", sub: "வேர்ச்சொல்: தொடு (Past)", opts: ["தொட்டாய்", "தொடுகிறாய்", "தொடுவாய்"], a: "தொட்டாய்" },
+      { w: "We will start tomorrow", sub: "வேர்ச்சொல்: புறப்படு (Future)", opts: ["புறப்படுவோம்", "புறப்பட்டோம்", "புறப்படுகிறோம்"], a: "புறப்படுவோம்" },
+      { w: "Why did you call me?", sub: "எடுத்துக்காட்டு வாக்கியம்", opts: ["நீங்கள் எதற்காக என்னை அழைத்தீர்கள்?", "நீங்கள் எங்கே சென்றீர்கள்?", "நீங்கள் என்ன சாப்பிட்டீர்கள்?"], a: "நீங்கள் எதற்காக என்னை அழைத்தீர்கள்?" }
+    ];
+    let idx2 = 0, score2 = 0;
+
+    const q3 = [
+      { w: "ஒருவரின் புத்தியைத் தொட எந்த மொழியில் பேச வேண்டும்?", sub: "நெல்சன் மண்டேலா பொன்மொழி", opts: ["அவருக்குப் புரியும் மொழி", "தாய்மொழி", "சைகை மொழி"], a: "அவருக்குப் புரியும் மொழி" },
+      { w: "ஒருவரின் இதயத்தைத் தொட எந்த மொழியில் பேச வேண்டும்?", sub: "நெல்சன் மண்டேலா பொன்மொழி", opts: ["அவரின் தாய்மொழி", "புரியும் மொழி", "ஆங்கிலம்"], a: "அவரின் தாய்மொழி" },
+      { w: "தமிழ் மொழி எத்தனை ஆண்டுகளுக்கும் மேல் பழமை வாய்ந்தது?", sub: "பாடம் - 1", opts: ["2500 ஆண்டுகளுக்கு மேல்", "1000 ஆண்டுகள்", "500 ஆண்டுகள்"], a: "2500 ஆண்டுகளுக்கு மேல்" },
+      { w: "'Native Language' என்பதன் தமிழாக்கம் என்ன?", sub: "சொல்வளம்", opts: ["தாய்மொழி", "பிறமொழி", "செம்மொழி"], a: "தாய்மொழி" },
+      { w: "'Pride' என்பதன் தமிழாக்கம் என்ன?", sub: "சொல்வளம்", opts: ["பெருமை", "உறவு", "சிந்தனை"], a: "பெருமை" },
+      { w: "'Identity' என்பதன் தமிழாக்கம் என்ன?", sub: "சொல்வளம்", opts: ["அடையாளம்", "இலக்கியம்", "புலவர்"], a: "அடையாளம்" },
+      { w: "'Thoughts' என்பதன் தமிழாக்கம் என்ன?", sub: "சொல்வளம்", opts: ["சிந்தனைகள்", "உறவுகள்", "சொற்கள்"], a: "சிந்தனைகள்" },
+      { w: "'Uniqueness' என்பதன் தமிழாக்கம் என்ன?", sub: "சொல்வளம்", opts: ["தனித்தன்மை", "இன்றியமையாதது", "செம்மொழி"], a: "தனித்தன்மை" },
+      { w: "'Indispensable' என்பதன் தமிழாக்கம் என்ன?", sub: "சொல்வளம்", opts: ["இன்றியமையாதது", "அடையாளம்", "பெருமை"], a: "இன்றியமையாதது" },
+      { w: "'Relationships' என்பதன் தமிழாக்கம் என்ன?", sub: "சொல்வளம்", opts: ["உறவுகள்", "சிந்தனைகள்", "பெருமை"], a: "உறவுகள்" },
+      { w: "'Scholar' என்பதன் தமிழாக்கம் என்ன?", sub: "சொல்வளம்", opts: ["பேரறிஞர்", "அடையாளம்", "தோழன்"], a: "பேரறிஞர்" },
+      { w: "'Literature' என்பதன் தமிழாக்கம் என்ன?", sub: "சொல்வளம்", opts: ["இலக்கியம்", "இலக்கணம்", "பாடல்"], a: "இலக்கியம்" },
+      { w: "'Language' என்பதன் தமிழாக்கம் என்ன?", sub: "சொல்வளம்", opts: ["மொழி", "வார்த்தை", "ஒலி"], a: "மொழி" },
+      { w: "குழந்தை தன் தாயின் வயிற்றில் வளரும்போதே எதைப் பழகுகிறது?", sub: "பாடம் - 1", opts: ["தாய்மொழி", "பிறமொழி", "பாடல்கள்"], a: "தாய்மொழி" },
+      { w: "தாய்மொழியை நாம் எவ்விதம் கற்க வேண்டும்?", sub: "பாடம் - 1", opts: ["பிழையின்றிப் பேசவும் எழுதவும்", "மறந்துவிட", "பாதியில் விட"], a: "பிழையின்றிப் பேசவும் எழுதவும்" },
+      { w: "செம்மொழியான தமிழ் மொழியை நாம் எவ்வாறு கற்க வேண்டும்?", sub: "பாடம் - 1", opts: ["பெருமையுடன்", "வருத்தத்துடன்", "பயத்துடன்"], a: "பெருமையுடன்" },
+      { w: "தாய்மொழி கற்றல் எதனை மேம்படுத்துகிறது?", sub: "பாடம் - 1", opts: ["உறவுகளையும் சிந்தனையையும்", "சோம்பலை", "மறதியை"], a: "உறவுகளையும் சிந்தனையையும்" },
+      { w: "நமது அடையாளம் எது?", sub: "பாடம் - 1", opts: ["தாய்மொழி", "பிறமொழி", "ஆடை"], a: "தாய்மொழி" },
+      { w: "குழந்தையின் நல்ல மனவளர்ச்சிக்கு எது இன்றியமையாதது?", sub: "பாடம் - 1", opts: ["தாய்மொழியில் பேசுவது", "அமைதியாக இருப்பது", "பிறமொழி மட்டும்"], a: "தாய்மொழியில் பேசுவது" },
+      { w: "'தமிழுக்கும் அமுதென்று பேர்' எனப் பாடியவர் யார்?", sub: "பாடம் - 1", opts: ["பாரதிதாசன்", "பாரதியார்", "கண்ணதாசன்"], a: "பாரதிதாசன்" }
+    ];
+    let idx3 = 0, score3 = 0;
+
+    const q4 = [
+      { w: "உலகத் தாய்மொழி தினம் எப்போது கொண்டாடப்படுகிறது?", sub: "பொது அறிவு", opts: ["பிப்ரவரி 21", "ஜனவரி 15", "ஆகஸ்ட் 15"], a: "பிப்ரவரி 21" },
+      { w: "'தமிழுக்கும் அமுதென்று பேர்' என்ற பாடலை எழுதியவர் யார்?", sub: "பாடல் வினா", opts: ["பாரதிதாசன்", "பாரதியார்", "கண்ணதாசன்"], a: "பாரதிதாசன்" },
+      { w: "'வாழ்க நிரந்தரம் வாழ்க தமிழ்மொழி' என்ற பாடலை இயற்றியவர் யார்?", sub: "பாடல் வினா", opts: ["மகாகவி பாரதியார்", "திருவள்ளுவர்", "ஔவையார்"], a: "மகாகவி பாரதியார்" },
+      { w: "'வான மளந்த தனைத்தும் அளந்திடும்...' அடுத்து வரும் சொல்?", sub: "வரி நிரப்பு", opts: ["வண்மொழி வாழியவே!", "செந்தமிழ் நாடெனும்", "தமிழ் எங்கள் உயிர்"], a: "வண்மொழி வாழியவே!" },
+      { w: "பாரதியார் பாடலில் 'நிரந்தரம்' என்பதன் பொருள் என்ன?", sub: "பொருள் அறிதல்", opts: ["எப்போதும் (நிலையானது)", "சிறிது நேரம்", "இன்று மட்டும்"], a: "எப்போதும் (நிலையானது)" },
+      { w: "'வண்மொழி' என்பதன் பொருள் என்ன?", sub: "பொருள் அறிதல்", opts: ["வளம் மிக்க மொழி", "கடினமான மொழி", "புதிய மொழி"], a: "வளம் மிக்க மொழி" },
+      { w: "'எங்கள் தமிழ்மொழி எங்கள் தமிழ்மொழி...' அடுத்து வரும் அடி?", sub: "வரி நிரப்பு", opts: ["என்றென்றும் வாழியவே!", "வாழிய பாரதம்!", "வாழ்க வளமுடன்!"], a: "என்றென்றும் வாழியவே!" },
+      { w: "'ஏழ்கடல் வைப்பினுந் தன்மணம் வீசி...' இதில் 'வைப்பு' என்பது?", sub: "பொருள் அறிதல்", opts: ["நிலப்பரப்பு (தேசம்)", "கடல் நீர்", "பாடல்"], a: "நிலப்பரப்பு (தேசம்)" },
+      { w: "'தொல்லை வினைதரு தொல்லை அகன்று...' இதில் 'தொல்லை' பொருள்?", sub: "பொருள் அறிதல்", opts: ["துன்பம் / பழமை", "மகிழ்ச்சி", "செல்வம்"], a: "துன்பம் / பழமை" },
+      { w: "சுடர்க தமிழ்நாடே! - என்று வாழ்த்தியவர் யார்?", sub: "பாடல் வரிகள்", opts: ["பாரதியார்", "கம்பர்", "வள்ளுவர்"], a: "பாரதியார்" },
+      { w: "பள்ளியில் நீ கற்கும் பிறமொழி ஒன்று?", sub: "சிந்தனை வினா", opts: ["ஆங்கிலம் / ஸ்பானிஷ்", "செம்மொழி", "சங்க மொழி"], a: "ஆங்கிலம் / ஸ்பானிஷ்" },
+      { w: "தமிழ் மொழியின் தனிச் சிறப்பு எது?", sub: "சிறப்பு", opts: ["செம்மொழித் தகுதி", "நேற்று தோன்றியது", "எழுத்துக்கள் குறைவு"], a: "செம்மொழித் தகுதி" },
+      { w: "தாய்மொழி கற்றல் எதை வளர்க்கும்?", sub: "பாடம் - 1", opts: ["உறவுகளையும் சிந்தனையையும்", "சோம்பேறித்தனத்தை", "மறதியை"], a: "உறவுகளையும் சிந்தனையையும்" },
+      { w: "மகாகவி பாரதியார் பிறந்த ஊர் எது?", sub: "பொது அறிவு", opts: ["எட்டயபுரம்", "மதுரை", "சென்னை"], a: "எட்டயபுரம்" },
+      { w: "'சுப்பிரமணியன்' என்பது யாருடைய இயற்பெயர்?", sub: "பொது அறிவு", opts: ["பாரதியார்", "பாரதிதாசன்", "திருவள்ளுவர்"], a: "பாரதியார்" },
+      { w: "'வானம் அறிந்ததனைத்தும் அறிந்து...' பாடல் அடி யாருடையது?", sub: "பாடல் வினா", opts: ["பாரதியார்", "ஔவையார்", "திருவள்ளுவர்"], a: "பாரதியார்" },
+      { w: "பாரதியாருக்கு 'மகாகவி' என்ற பட்டம் யாரால் போற்றப்படுகிறது?", sub: "சிறப்புப் பெயர்", opts: ["மக்கள் / அறிஞர்கள்", "அரசர்", "கல்லூரி"], a: "மக்கள் / அறிஞர்கள்" },
+      { w: "தமிழ் மொழி வாழ்த்தில் 'இசை கொண்டு வாழியவே' என்றால் பொருள் என்ன?", sub: "பொருள் அறிதல்", opts: ["புகழ் பெற்று வாழ்க", "பாட்டு பாடுக", "தூங்குக"], a: "புகழ் பெற்று வாழ்க" },
+      { w: "பாரதிதாசனின் இயற்பெயர் என்ன?", sub: "பொது அறிவு", opts: ["கனகசுப்புரத்தினம்", "சுப்பிரமணியன்", "துரைராசு"], a: "கனகசுப்புரத்தினம்" },
+      { w: "தமிழ் எத்தகைய மொழி எனப் பாரதியார் புகழ்கிறார்?", sub: "பாடல் கருத்து", opts: ["வளர்மொழி / வண்மொழி", "பயனற்ற மொழி", "சிறிய மொழி"], a: "வளர்மொழி / வண்மொழி" }
+    ];
+    let idx4 = 0;
+
+    const q5 = [
+      { w: "அரசன் போரில் தோற்றதும் எங்கு சென்று ஒளிந்து கொண்டான்?", opts: ["காட்டிலிருந்த ஒரு குகையில்", "அரண்மனையில்", "கடற்கரையில்"], a: "காட்டிலிருந்த ஒரு குகையில்" },
+      { w: "குகையில் அரசனின் கவனத்தை ஈர்த்தது எது?", opts: ["சிலந்தியின் விடாமுயற்சி", "ஒரு புலி", "பறவைகளின் ஒலி"], a: "சிலந்தியின் விடாமுயற்சி" },
+      { w: "சிலந்திக்கு என்ன நேர்ந்தது?", opts: ["வலை பின்னிய நூல் அறுந்து விழுந்தது", "பறந்து சென்றது", "வலை பின்னாமல் நின்றது"], a: "வலை பின்னிய நூல் அறுந்து விழுந்தது" },
+      { w: "நூல் அறுந்து விழுந்ததும் சிலந்தி என்ன செய்தது?", opts: ["மீண்டும் மீண்டும் முயற்சி செய்தது", "சோர்ந்து படுத்தது", "குகையை விட்டு ஓடியது"], a: "மீண்டும் மீண்டும் முயற்சி செய்தது" },
+      { w: "இறுதியில் சிலந்தி வலையை என்ன செய்தது?", opts: ["வெற்றிகரமாகப் பின்னி முடித்தது", "பாதியில் விட்டது", "அழித்தது"], a: "வெற்றிகரமாகப் பின்னி முடித்தது" },
+      { w: "சிலந்தியைப் பார்த்து அரசன் என்ன முடிவெடுத்தான்?", opts: ["வீரர்களைச் சேர்த்து மீண்டும் போரிட", "காட்டிலேயே வாழ", "நாட்டை விட்டுச் செல்ல"], a: "வீரர்களைச் சேர்த்து மீண்டும் போரிட" },
+      { w: "மீண்டும் நடந்த போரில் அரசனுக்கு என்ன கிடைத்தது?", opts: ["வெற்றி பெற்று அரசையும் பெற்றான்", "மீண்டும் தோல்வி", "பயந்து ஓடினான்"], a: "வெற்றி பெற்று அரசையும் பெற்றான்" },
+      { w: "இக்கதையின் நீதி என்ன?", opts: ["முயன்றால் முடியாதது எதுவும் இல்லை", "சோம்பலே சுகம்", "போரிடக் கூடாது"], a: "முயன்றால் முடியாதது எதுவும் இல்லை" },
+      { w: "'ஊக்கமது கைவிடேல்' என்று பாடியவர் யார்?", opts: ["ஔவையார்", "திருவள்ளுவர்", "பாரதியார்"], a: "ஔவையார்" },
+      { w: "குறள் 620: உலைவின்றித் தாழாது உஞற்றுபவர் எதை முறியடிப்பர்?", opts: ["ஊழையும் (துன்பத்தை/விதியை)", "அரசனை", "சிலந்தியை"], a: "ஊழையும் (துன்பத்தை/விதியை)" },
+      { w: "குறள் 616: முயற்சி எதனைத் தரும்?", opts: ["செல்வத்தை (திருவினை)", "வறுமையை", "தூக்கத்தை"], a: "செல்வத்தை (திருவினை)" },
+      { w: "முயற்சி இல்லாமை எதனைப் புகுத்தி விடும்?", opts: ["இன்மையை (வறுமையை)", "வெற்றியை", "மகிழ்ச்சியை"], a: "இன்மையை (வறுமையை)" },
+      { w: "திருக்குறளை இயற்றியவர் யார்?", opts: ["திருவள்ளுவர்", "கம்பர்", "பாரதியார்"], a: "திருவள்ளுவர்" },
+      { w: "திருக்குறளில் எத்தனை அதிகாரங்கள் உள்ளன?", opts: ["133", "100", "150"], a: "133" },
+      { w: "திருக்குறள் எத்தனை பால்களைக் கொண்டது?", opts: ["3 (அறம், பொருள், இன்பம்)", "2", "4"], a: "3 (அறம், பொருள், இன்பம்)" },
+      { w: "அரசர் குகையில் என்ன மனநிலையில் இருந்தார்?", opts: ["மன வருத்தத்துடன்", "மகிழ்ச்சியுடன்", "ஆடம்பரமாக"], a: "மன வருத்தத்துடன்" },
+      { w: "சிலந்தி எதன் மீது ஊர்ந்து சென்றது?", opts: ["குகைச் சுவரின் மீது", "மண்ணில்", "மரத்தின் மேல்"], a: "குகைச் சுவரின் மீது" },
+      { w: "'உஞற்றுபவர்' என்பதன் பொருள் என்ன?", opts: ["முயற்சி செய்பவர்", "தூங்குபவர்", "ஓடுபவர்"], a: "முயற்சி செய்பவர்" },
+      { w: "'உலைவின்றி' என்பதன் பொருள் என்ன?", opts: ["தளர்ச்சி இல்லாமல்", "மகிழ்ச்சியாக", "கோபமாக"], a: "தளர்ச்சி இல்லாமல்" },
+      { w: "விடாமுயற்சிக்கு உதாரணமாக இக்கதையில் கூறப்படும் உயிரினம் எது?", opts: ["சிலந்தி", "எறும்பு", "யானை"], a: "சிலந்தி" }
+    ];
+    let idx5 = 0, spiderLvl = 0;
+
+    /* SECTION 6: THIRUKKURAL RECONSTRUCTION */
+    const kuralTasks = [
+      {
+        kuralNum: 616,
+        type: 'slot',
+        words: ["முயற்சி", "திருவினை", "யாக்கும்", "முயற்றின்மை", "இன்மை", "புகுத்தி", "விடும்."],
+        blankIndex: 4,
+        options: ["இன்மை", "உண்மை", "பொறுமை"],
+        meaning: "பொருள்: முயற்சி செய்தால் முடியாதது என்று எதுவும் இல்லை. முயலாமை துன்பத்தைத் தரும்."
+      },
+      {
+        kuralNum: 616,
+        type: 'slot',
+        words: ["முயற்சி", "திருவினை", "யாக்கும்", "முயற்றின்மை", "இன்மை", "புகுத்தி", "விடும்."],
+        blankIndex: 1,
+        options: ["திருவினை", "பொருளினை", "அறிவினை"],
+        meaning: "பொருள்: முயற்சி ஒருவருக்குச் செல்வத்தைத் தரும் (திரு = செல்வம்)."
+      },
+      {
+        kuralNum: 616,
+        type: 'slot',
+        words: ["முயற்சி", "திருவினை", "யாக்கும்", "முயற்றின்மை", "இன்மை", "புகுத்தி", "விடும்."],
+        blankIndex: 0,
+        options: ["முயற்சி", "பயிற்சி", "மகிழ்ச்சி"],
+        meaning: "பொருள்: முயற்சி செய்தல் வாழ்வை உயர்த்தும் காரணியாகும்."
+      },
+      {
+        kuralNum: 616,
+        type: 'slot',
+        words: ["முயற்சி", "திருவினை", "யாக்கும்", "முயற்றின்மை", "இன்மை", "புகுத்தி", "விடும்."],
+        blankIndex: 3,
+        options: ["முயற்றின்மை", "சோம்பல்", "ஏழ்மை"],
+        meaning: "பொருள்: முயற்சியின்மை ஒருவருக்கு வறுமையையும் இழிவையும் கொண்டு சேர்க்கும்."
+      },
+      {
+        kuralNum: 616,
+        type: 'slot',
+        words: ["முயற்சி", "திருவினை", "யாக்கும்", "முயற்றின்மை", "இன்மை", "புகுத்தி", "விடும்."],
+        blankIndex: 5,
+        options: ["புகுத்தி", "அழித்து", "சேர்த்து"],
+        meaning: "பொருள்: முயற்சி செய்யாதிருப்பது துன்பத்தைப் புகுத்தி விடும்."
+      },
+      {
+        kuralNum: 620,
+        type: 'slot',
+        words: ["ஊழையும்", "உப்பக்கம்", "காண்பர்", "உலைவின்றித்", "தாழாது", "உஞற்று", "பவர்."],
+        blankIndex: 1,
+        options: ["உப்பக்கம்", "முப்பக்கம்", "எப்பக்கம்"],
+        meaning: "பொருள்: விடாது உழைப்பவர் விதியையும் புறமுதுகு காட்டி ஓடச் செய்வர்."
+      },
+      {
+        kuralNum: 620,
+        type: 'slot',
+        words: ["ஊழையும்", "உப்பக்கம்", "காண்பர்", "உலைவின்றித்", "தாழாது", "உஞற்று", "பவர்."],
+        blankIndex: 0,
+        options: ["ஊழையும்", "விதியையும்", "பகையையும்"],
+        meaning: "பொருள்: 'ஊழ்' என்றால் முன்வினைப் பயன் / விதி. அதனையும் முயற்சியால் வெல்லலாம்."
+      },
+      {
+        kuralNum: 620,
+        type: 'slot',
+        words: ["ஊழையும்", "உப்பக்கம்", "காண்பர்", "உலைவின்றித்", "தாழாது", "உஞற்று", "பவர்."],
+        blankIndex: 3,
+        options: ["உலைவின்றித்", "பயமின்றித்", "அமைதியாய்"],
+        meaning: "பொருள்: சோர்வில்லாமல் (உலைவின்றி) இடைவிடாது உழைப்பவர் தடைகளை முறியடிப்பர்."
+      },
+      {
+        kuralNum: 620,
+        type: 'slot',
+        words: ["ஊழையும்", "உப்பக்கம்", "காண்பர்", "உலைவின்றித்", "தாழாது", "உஞற்று", "பவர்."],
+        blankIndex: 5,
+        options: ["உஞற்று", "பார்க்கும்", "செல்லும்"],
+        meaning: "பொருள்: 'உஞற்றுபவர்' என்றால் முயற்சி செய்பவர் என்று பொருள்."
+      },
+      {
+        kuralNum: 620,
+        type: 'slot',
+        words: ["ஊழையும்", "உப்பக்கம்", "காண்பர்", "உலைவின்றித்", "தாழாது", "உஞற்று", "பவர்."],
+        blankIndex: 4,
+        options: ["தாழாது", "வீழாது", "வாடாது"],
+        meaning: "பொருள்: காலதாமதம் செய்யாமல் உடனடியாக முயல்பவர்."
+      },
+      {
+        kuralNum: 616,
+        type: 'scramble_line2',
+        prompt: "குறள் 616 இன் இரண்டாம் அடியைச் சீரமைக்க (Assemble 2nd Line):",
+        words: ["முயற்சி", "திருவினை", "யாக்கும்", "முயற்றின்மை", "___", "___", "___."],
+        line2Correct: ["இன்மை", "புகுத்தி", "விடும்."],
+        scrambled: ["புகுத்தி", "இன்மை", "விடும்."],
+        meaning: "முயற்சி திருவினை யாக்கும் முயற்றின்மை இன்மை புகுத்தி விடும்."
+      },
+      {
+        kuralNum: 620,
+        type: 'scramble_line2',
+        prompt: "குறள் 620 இன் இரண்டாம் அடியைச் சீரமைக்க (Assemble 2nd Line):",
+        words: ["ஊழையும்", "உப்பக்கம்", "காண்பர்", "உலைவின்றித்", "___", "___", "___."],
+        line2Correct: ["தாழாது", "உஞற்று", "பவர்."],
+        scrambled: ["பவர்.", "தாழாது", "உஞற்று"],
+        meaning: "ஊழையும் உப்பக்கம் காண்பர் உலைவின்றித் தாழாது உஞற்று பவர்."
+      },
+      {
+        kuralNum: 616,
+        type: 'scramble_line1',
+        prompt: "குறள் 616 இன் முதல் 4 சீர்களை வரிசைப்படுத்துக (Order first 4 words):",
+        words: ["___", "___", "___", "___", "இன்மை", "புகுத்தி", "விடும்."],
+        line1Correct: ["முயற்சி", "திருவினை", "யாக்கும்", "முயற்றின்மை"],
+        scrambled: ["யாக்கும்", "முயற்சி", "முயற்றின்மை", "திருவினை"],
+        meaning: "முயற்சி திருவினை யாக்கும் முயற்றின்மை இன்மை புகுத்தி விடும்."
+      },
+      {
+        kuralNum: 620,
+        type: 'scramble_line1',
+        prompt: "குறள் 620 இன் முதல் 4 சீர்களை வரிசைப்படுத்துக (Order first 4 words):",
+        words: ["___", "___", "___", "___", "தாழாது", "உஞற்று", "பவர்."],
+        line1Correct: ["ஊழையும்", "உப்பக்கம்", "காண்பர்", "உலைவின்றித்"],
+        scrambled: ["காண்பர்", "ஊழையும்", "உலைவின்றித்", "உப்பக்கம்"],
+        meaning: "ஊழையும் உப்பக்கம் காண்பர் உலைவின்றித் தாழாது உஞற்று பவர்."
+      },
+      {
+        kuralNum: 616,
+        type: 'meaning_match',
+        targetWord: "திருவினை",
+        opts: ["செல்வத்தை", "வறுமையை", "கோபத்தை"],
+        ans: "செல்வத்தை",
+        explanation: "'திரு' என்றால் செல்வம். முயற்சி செல்வத்தைக் கொண்டு வரும்."
+      },
+      {
+        kuralNum: 616,
+        type: 'meaning_match',
+        targetWord: "இன்மை",
+        opts: ["வறுமை / துன்பம்", "உண்மை", "செல்வம்"],
+        ans: "வறுமை / துன்பம்",
+        explanation: "'இன்மை' என்பது ஏழ்மையையும் துன்பத்தையும் குறிக்கும்."
+      },
+      {
+        kuralNum: 620,
+        type: 'meaning_match',
+        targetWord: "ஊழ்",
+        opts: ["விதி / முன்வினைத் தடை", "வெற்றி", "மழை"],
+        ans: "விதி / முன்வினைத் தடை",
+        explanation: "செயலுக்கு இடையூறாக வரும் விதியையும் ஊழ் என்கிறோம்."
+      },
+      {
+        kuralNum: 620,
+        type: 'meaning_match',
+        targetWord: "உப்பக்கம்",
+        opts: ["புறமுதுகு காட்டி ஓடச் செய்தல் (தோல்வி)", "முன்னால் வருதல்", "அருகில் நிற்றல்"],
+        ans: "புறமுதுகு காட்டி ஓடச் செய்தல் (தோல்வி)",
+        explanation: "'உப்பக்கம் காண்பர்' என்றால் விதியையே தோல்வியடைந்து புறமுதுகு காட்டி ஓடச் செய்வர்."
+      },
+      {
+        kuralNum: 620,
+        type: 'meaning_match',
+        targetWord: "உலைவின்றி",
+        opts: ["சோர்வு இல்லாமல் (தளர்ச்சியின்றி)", "பயத்துடன்", "ஆடம்பரமாக"],
+        ans: "சோர்வு இல்லாமல் (தளர்ச்சியின்றி)",
+        explanation: "மனம் தளராமல் சோர்வின்றி உழைப்பது."
+      },
+      {
+        kuralNum: 620,
+        type: 'meaning_match',
+        targetWord: "உஞற்றுபவர்",
+        opts: ["விடாமுயற்சி செய்பவர்", "தூங்குபவர்", "வேடிக்கை பார்ப்பவர்"],
+        ans: "விடாமுயற்சி செய்பவர்",
+        explanation: "'உஞற்றுதல்' என்றால் விடாது முயற்சி செய்து உழைத்தல்."
+      }
+    ];
+
+    let kuralTaskIdx = 0, kuralScore = 0;
+    let assembledLine = [];
+
+    function renderKuralTask() {
+      const task = kuralTasks[kuralTaskIdx];
+      document.getElementById('p6-counter').innerText = `பயிற்சி: ${kuralTaskIdx + 1}/${kuralTasks.length}`;
+
+      const l1Slots = document.getElementById('line-1-slots');
+      const l2Slots = document.getElementById('line-2-slots');
+      const dock = document.getElementById('kural-word-dock');
+      const meaningBox = document.getElementById('kural-meaning-box');
+      const modeTitle = document.getElementById('kural-mode-title');
+      const feed = document.getElementById('p6-feed');
+      feed.innerText = "";
+      l1Slots.innerHTML = "";
+      l2Slots.innerHTML = "";
+      dock.innerHTML = "";
+
+      if (task.type === 'slot') {
+        modeTitle.innerText = `குறள் ${task.kuralNum}: கோடிட்ட சீரைச் சொடுக்குக (Tap missing word):`;
+        meaningBox.innerText = task.meaning;
+
+        task.words.forEach((w, i) => {
+          const slot = document.createElement('div');
+          slot.className = 'kural-slot';
+          if (i === task.blankIndex) {
+            slot.classList.add('blank-target');
+            slot.innerText = "___";
+            slot.id = `blank-${i}`;
+          } else {
+            slot.classList.add('filled');
+            slot.innerText = w;
+          }
+          if (i < 4) l1Slots.appendChild(slot);
+          else l2Slots.appendChild(slot);
+        });
+
+        const shuffledOpts = shuffleArray(task.options);
+        shuffledOpts.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'tile-btn';
+          btn.innerText = opt;
+          btn.onclick = () => checkKuralSlot(opt, task.words[task.blankIndex], task.blankIndex);
+          dock.appendChild(btn);
+        });
+
+      } else if (task.type === 'scramble_line1' || task.type === 'scramble_line2') {
+        modeTitle.innerText = task.prompt;
+        meaningBox.innerText = task.meaning;
+        assembledLine = [];
+
+        task.words.forEach((w, i) => {
+          const slot = document.createElement('div');
+          slot.className = 'kural-slot';
+          slot.id = `scramble-slot-${i}`;
+          if (w === "___") {
+            slot.classList.add('blank-target');
+            slot.innerText = `(${i + 1})`;
+          } else {
+            slot.classList.add('filled');
+            slot.innerText = w;
+          }
+          if (i < 4) l1Slots.appendChild(slot);
+          else l2Slots.appendChild(slot);
+        });
+
+        const shuffledScramble = shuffleArray(task.scrambled);
+        shuffledScramble.forEach(w => {
+          const btn = document.createElement('button');
+          btn.className = 'tile-btn';
+          btn.innerText = w;
+          btn.onclick = () => handleScramblePick(btn, w, task);
+          dock.appendChild(btn);
+        });
+
+      } else if (task.type === 'meaning_match') {
+        modeTitle.innerText = `அரும்பொருள் அறிதல் (Word Meaning): "${task.targetWord}"`;
+        meaningBox.innerText = `குறள் சொல்லின் சரியான பொருளைத் தேர்ந்தெடுக்கவும்.`;
+
+        const slot = document.createElement('div');
+        slot.className = 'kural-slot filled';
+        slot.style.minWidth = "200px";
+        slot.style.fontSize = "1.4rem";
+        slot.innerText = task.targetWord;
+        l1Slots.appendChild(slot);
+
+        const shuffledMeaningOpts = shuffleArray(task.opts);
+        shuffledMeaningOpts.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'tile-btn';
+          btn.style.padding = "0.7rem 1.4rem";
+          btn.innerText = opt;
+          btn.onclick = () => checkMeaningMatch(opt, task.ans, task.explanation);
+          dock.appendChild(btn);
+        });
+      }
+    }
+
+    function checkKuralSlot(chosen, correct, blankIdx) {
+      const feed = document.getElementById('p6-feed');
+      const targetSlot = document.getElementById(`blank-${blankIdx}`);
+
+      if (chosen === correct) {
+        targetSlot.innerText = chosen;
+        targetSlot.classList.remove('blank-target');
+        targetSlot.classList.add('filled');
+        targetSlot.style.borderColor = "var(--green)";
+        targetSlot.style.color = "var(--green)";
+
+        feed.innerText = "மிகச் சரி! சீர் சரியாகப் பொருந்திவிட்டது! 🎉";
+        feed.style.color = "var(--green)";
+
+        kuralScore += 10;
+        document.getElementById('p6-score').innerText = `புள்ளிகள்: ${kuralScore}`;
+
+        speakHumanTamil(kuralTasks[kuralTaskIdx].meaning, () => {
+          setTimeout(() => nextKuralTask(), 1200);
+        });
+      } else {
+        feed.innerText = "தவறு! மீண்டும் சரியான சீரைத் தேர்ந்தெடுங்கள் ❌";
+        feed.style.color = "var(--red)";
+        speakHumanTamil("தவறு. மீண்டும் முயற்சி செய்.");
+      }
+    }
+
+    function handleScramblePick(btn, word, task) {
+      const feed = document.getElementById('p6-feed');
+      const isL1 = task.type === 'scramble_line1';
+      const targetList = isL1 ? task.line1Correct : task.line2Correct;
+      const startIndex = isL1 ? 0 : 4;
+      const expectedWord = targetList[assembledLine.length];
+
+      if (word === expectedWord) {
+        const slotIdx = startIndex + assembledLine.length;
+        const targetSlot = document.getElementById(`scramble-slot-${slotIdx}`);
+        targetSlot.innerText = word;
+        targetSlot.classList.remove('blank-target');
+        targetSlot.classList.add('filled');
+        btn.style.visibility = 'hidden';
+
+        assembledLine.push(word);
+
+        if (assembledLine.length === targetList.length) {
+          feed.innerText = "அற்புதம்! முழு அடியையும் சரியாக வரிசைப்படுத்தி விட்டீர்கள்! 🌟";
+          feed.style.color = "var(--green)";
+          kuralScore += 15;
+          document.getElementById('p6-score').innerText = `புள்ளிகள்: ${kuralScore}`;
+          speakHumanTamil(task.meaning, () => {
+            setTimeout(() => nextKuralTask(), 1400);
+          });
+        }
+      } else {
+        feed.innerText = `தவறு! அடுத்த சீர் "${expectedWord}" ஆக இருக்க வேண்டும் ❌`;
+        feed.style.color = "var(--red)";
+        speakHumanTamil("தவறு, மீண்டும் முயற்சி செய்.");
+      }
+    }
+
+    function checkMeaningMatch(chosen, correct, explanation) {
+      const feed = document.getElementById('p6-feed');
+      if (chosen === correct) {
+        feed.innerText = `மிகச் சரி! ${explanation} 🎯`;
+        feed.style.color = "var(--green)";
+        kuralScore += 10;
+        document.getElementById('p6-score').innerText = `புள்ளிகள்: ${kuralScore}`;
+        speakHumanTamil(`மிகச் சரி! ${chosen}. ${explanation}`, () => {
+          setTimeout(() => nextKuralTask(), 1500);
+        });
+      } else {
+        feed.innerText = "பொருள் தவறானது! புத்தக விளக்கத்தைப் பாருங்கள் ❌";
+        feed.style.color = "var(--red)";
+        speakHumanTamil("தவறு. மீண்டும் யோசித்துப் பாருங்கள்.");
+      }
+    }
+
+    function speakCurrentKural() {
+      const task = kuralTasks[kuralTaskIdx];
+      if (task.kuralNum === 616) {
+        speakHumanTamil("முயற்சி திருவினை யாக்கும் முயற்றின்மை இன்மை புகுத்தி விடும்.");
+      } else {
+        speakHumanTamil("ஊழையும் உப்பக்கம் காண்பர் உலைவின்றித் தாழாது உஞற்று பவர்.");
+      }
+    }
+
+    function nextKuralTask() {
+      kuralTaskIdx = (kuralTaskIdx + 1) % kuralTasks.length;
+      renderKuralTask();
+    }
+
+    function prevKuralTask() {
+      kuralTaskIdx = (kuralTaskIdx - 1 + kuralTasks.length) % kuralTasks.length;
+      renderKuralTask();
+    }
+
+    /* RENDER LOGIC FOR SECTIONS 0 TO 5 */
+    function renderSection(sIdx) {
+      let data, curIdx;
+      if (sIdx === 0) { data = q0; curIdx = idx0; }
+      else if (sIdx === 1) { data = q1; curIdx = idx1; }
+      else if (sIdx === 2) { data = q2; curIdx = idx2; }
+      else if (sIdx === 3) { data = q3; curIdx = idx3; }
+      else if (sIdx === 4) { data = q4; curIdx = idx4; }
+      else if (sIdx === 5) { data = q5; curIdx = idx5; }
+
+      const item = data[curIdx];
+      document.getElementById(`p${sIdx}-counter`).innerText = `கேள்வி: ${curIdx + 1}/${data.length}`;
+      document.getElementById(`p${sIdx}-word`).innerText = item.w;
+      if (document.getElementById(`p${sIdx}-sub`)) {
+        document.getElementById(`p${sIdx}-sub`).innerText = item.sub || "";
+      }
+
+      const btnContainer = document.getElementById(`p${sIdx}-btns`);
+      btnContainer.innerHTML = '';
+
+      const randomizedOptions = shuffleArray(item.opts);
+      randomizedOptions.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.innerText = opt;
+        btn.onclick = () => handleAnswer(sIdx, opt, item.a, btn);
+        btnContainer.appendChild(btn);
+      });
+      document.getElementById(`p${sIdx}-feed`).innerText = "";
+    }
+
+    function handleAnswer(sIdx, choice, correct, btnEl) {
+      const f = document.getElementById(`p${sIdx}-feed`);
+      if (choice === correct) {
+        btnEl.classList.add('correct-choice');
+        f.innerText = "மிகச் சரி! 🎉";
+        f.style.color = "var(--green)";
+        speakHumanTamil("மிகச் சரி! " + choice);
+
+        if (sIdx === 0) { score0 += 10; document.getElementById('p0-score').innerText = `புள்ளிகள்: ${score0}`; }
+        if (sIdx === 1) { score1 += 10; document.getElementById('p1-score').innerText = `புள்ளிகள்: ${score1}`; }
+        if (sIdx === 2) { score2 += 10; document.getElementById('p2-score').innerText = `புள்ளிகள்: ${score2}`; }
+        if (sIdx === 3) { score3 += 10; document.getElementById('p3-score').innerText = `புள்ளிகள்: ${score3}`; }
+        if (sIdx === 5) {
+          spiderLvl = Math.min(20, spiderLvl + 1);
+          document.getElementById('spider-step').innerText = spiderLvl;
+          document.getElementById('spider-char').style.bottom = `${8 + (spiderLvl * 7)}px`;
+        }
+
+        setTimeout(() => nextQ(sIdx), 1100);
+      } else {
+        btnEl.classList.add('wrong-choice');
+        f.innerText = "தவறு! அடுத்த கேள்வியைத் தொடரலாம் அல்லது மீண்டும் முயலலாம் ❌";
+        f.style.color = "var(--red)";
+        speakHumanTamil("தவறு. மீண்டும் முயற்சி செய்.");
+        if (sIdx === 5) {
+          spiderLvl = Math.max(0, spiderLvl - 1);
+          document.getElementById('spider-step').innerText = spiderLvl;
+          document.getElementById('spider-char').style.bottom = `${8 + (spiderLvl * 7)}px`;
+        }
+      }
+    }
+
+    function nextQ(sIdx) {
+      if (sIdx === 0) idx0 = (idx0 + 1) % q0.length;
+      else if (sIdx === 1) idx1 = (idx1 + 1) % q1.length;
+      else if (sIdx === 2) idx2 = (idx2 + 1) % q2.length;
+      else if (sIdx === 3) idx3 = (idx3 + 1) % q3.length;
+      else if (sIdx === 4) idx4 = (idx4 + 1) % q4.length;
+      else if (sIdx === 5) {
+        if (spiderLvl >= 20) {
+          document.getElementById('p5-word').innerText = "🏆 வெற்றி! அரசன் மீண்டும் வென்றான்!";
+          document.getElementById('p5-sub').innerText = "முயன்றால் முடியாதது எதுவும் இல்லை!";
+          speakHumanTamil("வெற்றி! முயன்றால் முடியாதது எதுவும் இல்லை!");
+          return;
+        }
+        idx5 = (idx5 + 1) % q5.length;
+      }
+      renderSection(sIdx);
+    }
+
+    function prevQ(sIdx) {
+      if (sIdx === 0) idx0 = (idx0 - 1 + q0.length) % q0.length;
+      else if (sIdx === 1) idx1 = (idx1 - 1 + q1.length) % q1.length;
+      else if (sIdx === 2) idx2 = (idx2 - 1 + q2.length) % q2.length;
+      else if (sIdx === 3) idx3 = (idx3 - 1 + q3.length) % q3.length;
+      else if (sIdx === 4) idx4 = (idx4 - 1 + q4.length) % q4.length;
+      else if (sIdx === 5) idx5 = (idx5 - 1 + q5.length) % q5.length;
+      renderSection(sIdx);
+    }
+
+    function speakCurrent(sIdx) {
+      let word = "";
+      if (sIdx === 0) word = q0[idx0].w;
+      if (sIdx === 1) word = q1[idx1].w;
+      if (sIdx === 2) word = q2[idx2].a;
+      if (sIdx === 3) word = q3[idx3].w;
+      if (sIdx === 4) word = q4[idx4].w;
+      if (sIdx === 5) word = q5[idx5].w;
+      speakHumanTamil(word);
+    }
+
+    initImages();
+    for (let i = 0; i <= 5; i++) renderSection(i);
+    renderKuralTask();
+  </script>
+</body>
+</html>
